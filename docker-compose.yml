@@ -1,0 +1,32 @@
+version: '3.4'
+
+services:
+  proxy:
+    image: ubuntu/squid
+    # ports:
+    #   - 3128:3128
+    environment:
+      - TZ=CET
+    volumes:
+      - ./squid.conf:/etc/squid/squid.conf
+    restart: always
+    deploy:
+      resources:
+        limits:
+          cpus: "0.3"
+          memory: 128M
+    network_mode: "service:ngrok"
+  ngrok:
+    image: ngrok/ngrok
+    volumes:
+      - ./ngrok.yml:/etc/ngrok.yml
+    environment:
+      - NGROK_CONFIG=/etc/ngrok.yml
+      - NGROK_AUTHTOKEN=<add-authtoken-here>
+    ports:
+      - 4040:4040
+  where:
+    build: ./where-am-i
+    network_mode: "service:ngrok"
+    depends_on:
+      - proxy

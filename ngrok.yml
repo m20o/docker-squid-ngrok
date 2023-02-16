@@ -1,0 +1,7 @@
+version: 2
+web_addr: 0.0.0.0:4040
+region: eu
+tunnels:
+  squid:
+    addr: localhost:3128
+    proto: tcp
